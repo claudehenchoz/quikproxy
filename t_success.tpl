@@ -18,12 +18,12 @@
                 <h1>
                 Access granted
                 </h1>
-                <h1>
-                <small>Proxy address: {{host}}</small>
-                </h1>
-                <h1>
-                <small>Proxy port: 8888</small>
-                </h1>
+                <p>
+                    <ul>
+                        <li>Proxy address: {{host}}</li>
+                        <li>Proxy port: 8888</li>
+                    </ul>
+                </p>
             </div>
         </div>
     </body>
