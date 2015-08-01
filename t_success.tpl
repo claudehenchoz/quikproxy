@@ -19,7 +19,10 @@
                 Access granted
                 </h1>
                 <h1>
-                <small>Proxy address: http://{{host}}:8888</small>
+                <small>Proxy address: {{host}}</small>
+                </h1>
+                <h1>
+                <small>Proxy port: 8888</small>
                 </h1>
             </div>
         </div>
