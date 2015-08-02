@@ -16,7 +16,7 @@
         <div class="vertical-center">
             <div class="container">
                 <h1>
-                Welcome, visitor from {{ data.body['city'] }}!
+                Welcome, visitor from {{ city }}!
                 </h1>
                 <p>
                 <form action='allow' method='POST'><input type='password' name='password'></form>

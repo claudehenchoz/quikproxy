@@ -1,6 +1,8 @@
 from bottle import route, run, request, template, abort
 from subprocess import call
+from os import name
 import unirest
+
 
 masterkey = "changeme"
 
@@ -11,9 +13,13 @@ def hello():
     host = request.get_header('host').split(':', 1)[0]
 
     url = "http://ipinfo.io/" + ip
-    data = unirest.get(url, headers={"Accept": "application/json"})
+    try:
+        data = unirest.get(url, headers={"Accept": "application/json"})
+        city = data.body['city']
+    except:
+        city = "an unknown location"
 
-    return template("t_hello", ip=ip, host=host, data=data)
+    return template("t_hello", ip=ip, host=host, city=city)
 
 
 @route('/allow', method='POST')
@@ -23,14 +29,17 @@ def do_login():
 
     if password == masterkey:
         host = request.get_header('host').split(':', 1)[0]
-        with open('/etc/tinyproxy.conf', 'a') as file:
-            file.write('Allow %s\n' % ip)
-        call(["service", "tinyproxy", "restart"])
-        call(["iptables", "-A", "INPUT",
-                          "-s", ip,
-                          "-p", "tcp",
-                          "--dport", "8888",
-                          "-j", "ACCEPT"])
+
+        if name == 'posix':
+            with open('/etc/tinyproxy.conf', 'a') as file:
+                file.write('Allow %s\n' % ip)
+            call(["service", "tinyproxy", "restart"])
+            call(["iptables", "-A", "INPUT",
+                              "-s", ip,
+                              "-p", "tcp",
+                              "--dport", "8888",
+                              "-j", "ACCEPT"])
+
         return template("t_success", host=host)
 
     else:
