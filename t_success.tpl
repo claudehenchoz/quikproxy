@@ -16,14 +16,18 @@
         <div class="vertical-center">
             <div class="container">
                 <h1>
-                Access granted
+                HTTP Proxy Server<small>Access granted</small>
                 </h1>
-                <p>
-                    <ul>
-                        <li>Proxy address: {{host}}</li>
-                        <li>Proxy port: 8888</li>
-                    </ul>
-                </p>
+                <form>
+                    <div class="form-group">
+                        <label for="httpProxyAddress">Server Address</label>
+                        <input type="text" class="form-control" id="httpProxyAddress" value="{{host}}" onClick="this.select();" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="httpProxyPort">Server Port</label>
+                        <input type="text" class="form-control" id="httpProxyPort" value="8888" onClick="this.select();" readonly>
+                    </div>
+                </form>
             </div>
         </div>
     </body>

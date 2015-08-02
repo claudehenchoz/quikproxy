@@ -1,5 +1,6 @@
 from bottle import route, run, request, template, abort
 from subprocess import call
+import unirest
 
 masterkey = "changeme"
 
@@ -8,7 +9,11 @@ masterkey = "changeme"
 def hello():
     ip = request.environ.get('REMOTE_ADDR')
     host = request.get_header('host').split(':', 1)[0]
-    return template("t_hello", ip=ip, host=host)
+
+    url = "http://ipinfo.io/" + ip
+    data = unirest.get(url, headers={"Accept": "application/json"})
+
+    return template("t_hello", ip=ip, host=host, data=data)
 
 
 @route('/allow', method='POST')
@@ -21,6 +26,11 @@ def do_login():
         with open('/etc/tinyproxy.conf', 'a') as file:
             file.write('Allow %s\n' % ip)
         call(["service", "tinyproxy", "restart"])
+        call(["iptables", "-A", "INPUT",
+                          "-s", ip,
+                          "-p", "tcp",
+                          "--dport", "8888",
+                          "-j", "ACCEPT"])
         return template("t_success", host=host)
 
     else:
